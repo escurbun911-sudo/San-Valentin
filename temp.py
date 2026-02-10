@@ -7,8 +7,25 @@ if 'size_si' not in st.session_state:
     st.session_state.size_si = 16
 if 'size_no' not in st.session_state:
     st.session_state.size_no = 16
+if 'intentos' not in st.session_state:
+    st.session_state.intentos = 0
 
-# 2. Botón SÍ
+# 2. Lista de frases para el botón NO
+frases_no = [
+    "No",
+    "¿Segura? 🥺",
+    "¿Muy segura? 🧐",
+    "Piénsalo bien...",
+    "¡Te daré chocolates! 🍫",
+    "¿Y si te lo pido por favor? ✨",
+    "¡Anda, di que sí!",
+    "Última oportunidad..."
+]
+
+# Seleccionamos la frase según el número de clics
+texto_no = frases_no[st.session_state.intentos % len(frases_no)]
+
+# 3. Botón SÍ
 with st.container():
     st.markdown(f"""
         <style>
@@ -26,7 +43,7 @@ with st.container():
 
 st.write(" ")
 
-# 3. Botón NO
+# 4. Botón NO
 with st.container():
     st.markdown(f"""
         <style>
@@ -38,8 +55,11 @@ with st.container():
         }}
         </style>
     """, unsafe_allow_html=True)
-    if st.button("No", key="no"):
+    if st.button(texto_no, key="no"):
         st.session_state.size_si += 20 # Aumenta el Sí
         if st.session_state.size_no > 6:
             st.session_state.size_no -= 2 # Achica el No
+        
+        # Incrementamos el contador para cambiar la frase
+        st.session_state.intentos += 1
         st.rerun()
